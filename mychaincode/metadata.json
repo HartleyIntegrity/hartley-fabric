@@ -1,0 +1,10 @@
+{
+    "name": "mychaincode",
+    "version": "1.0",
+    "contracts": {
+        "mycontract": {
+            "language": "go",
+            "path": "./mycontract.so"
+        }
+    }
+}
