@@ -12,6 +12,9 @@ services:
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - CORE_CHAINCODE_EXECUTETIMEOUT=600s
+      - GRPC_MAX_RECEIVE_MESSAGE_LENGTH=314572800
+      - GRPC_MAX_SEND_MESSAGE_LENGTH=314572800
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
     command: orderer
     volumes:
@@ -23,11 +26,6 @@ services:
   peer0.hartley.example.com:
     image: hyperledger/fabric-peer:latest
     environment:
-      - CORE_CHAINCODE_EXECUTETIMEOUT=600s
-      - CORE_GRPC_GOSSIP_MAXSENDMSGSIZE=2147483647
-      - CORE_GRPC_GOSSIP_MAXRECVMSGSIZE=2147483647
-      - GRPC_ARG_MAXMESSAGELENGTH=2147483647
-      - GRPC_ARG_MAXRECEIVEMESSAGELENGTH=2147483647
       - FABRIC_LOGGING_SPEC=INFO
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.hartley.example.com
@@ -40,6 +38,9 @@ services:
       - CORE_PEER_LOCALMSPID=HartleyMSP
       - CORE_VM_DOCKER_ATTACHSTDOUT=true
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp
+      - CORE_CHAINCODE_EXECUTETIMEOUT=600s
+      - GRPC_MAX_RECEIVE_MESSAGE_LENGTH=314572800
+      - GRPC_MAX_SEND_MESSAGE_LENGTH=314572800
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
