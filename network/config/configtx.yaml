@@ -1,0 +1,182 @@
+---
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: /Users/joe/hartley-fabric/network/crypto-config/peerOrganizations/hartley.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: OR('OrdererMSP.admin')
+      Writers:
+        Type: Signature
+        Rule: OR('OrdererMSP.admin')
+      Admins:
+        Type: Signature
+        Rule: OR('OrdererMSP.admin')
+      OrdererAdmins:
+        Type: Signature
+        Rule: OR('OrdererMSP.admin')
+  - &HartleyMSP
+    Name: HartleyMSP
+    ID: HartleyMSPID
+    MSPDir: /Users/joe/hartley-fabric/network/crypto-config/peerOrganizations/hartley.example.com/msp
+    AnchorPeers:
+      - Host: peer0.hartley.example.com
+        Port: 7051
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: OR('HartleyMSPID.admin')
+      Writers:
+        Type: Signature
+        Rule: OR('HartleyMSPID.admin')
+      Admins:
+        Type: Signature
+        Rule: OR('HartleyMSPID.admin')
+      OrdererAdmins:
+        Type: Signature
+        Rule: OR('HartleyMSPID.admin')
+Capabilities:
+  Channel:
+    V2_0: true
+    Policies: true
+  Orderer:
+    V2_0: true
+    Organizations: true
+  Application:
+    V2_0: true
+    Organizations: true
+    ACLs: true
+Orderer:
+  OrdererType: solo
+  Addresses:
+    - orderer.example.com:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Policies:
+    Readers:
+      Type: Signature
+      Rule: "OR('OrdererMSP.member')"
+    Writers:
+      Type: Signature
+      Rule: "OR('OrdererMSP.member')"
+    Admins:
+      Type: Signature
+      Rule: "OR('OrdererMSP.admin')"
+    BlockValidation:
+      Type: Signature
+      Rule: "OR('OrdererMSP.member')"
+Application:
+  Policies:
+    Readers:
+      Type: Signature
+      Rule: "OR('HartleyMSP.admin', 'HartleyMSP.peer', 'HartleyMSP.client')"
+    Writers:
+      Type: Signature
+      Rule: "OR('HartleyMSP.admin', 'HartleyMSP.client')"
+    Admins:
+      Type: Signature
+      Rule: "OR('HartleyMSP.admin')"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+Profiles:
+  HartleyGenesis:
+    Capabilities:
+      V2_0: true
+    Orderer:
+      OrdererType: solo
+      Addresses:
+        - orderer.example.com:7050
+      BatchTimeout: 2s
+      BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Application:
+      Policies:
+        Readers:
+          Type: ImplicitMeta
+          Rule: ANY Readers
+        Writers:
+          Type: ImplicitMeta
+          Rule: ANY Writers
+        Admins:
+          Type: ImplicitMeta
+          Rule: ANY Admins
+        LifecycleEndorsement:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Endorsement"
+        Endorsement:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Endorsement"
+      Organizations:
+        - *OrdererOrg
+        - *HartleyMSP
+  HartleyChannel:
+    Consortium: SampleConsortium
+    Capabilities:
+      V2_0: true
+    Application:
+      Organizations:
+        - *HartleyMSP
+      Policies:
+        Readers:
+          Type: ImplicitMeta
+          Rule: "ANY Readers"
+        Writers:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+        Admins:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Endorsement"
+        Endorsement:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Endorsement"
+      Policies:
+        Admins:
+          Type: Signature
+          Rule: "OR('HartleyMSP.admin')"
+        Writers:
+          Type: Signature
+          Rule: "OR('HartleyMSP.admin', 'HartleyMSP.peer')"
+        Readers:
+          Type: Signature
+          Rule: "OR('HartleyMSP.admin', 'HartleyMSP.peer', 'HartleyMSP.client')"
+    Orderer:
+      OrdererType: solo
+      Addresses:
+        - orderer.example.com:7050
+      BatchTimeout: 2s
+      BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+      Policies:
+        Readers:
+          Type: ImplicitMeta
+          Rule: "ANY Readers"
+        Writers:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+        Admins:
+          Type: ImplicitMeta
+          Rule: "MAJORITY Admins"
+        BlockValidation:
+          Type: ImplicitMeta
+          Rule: "ANY Writers"
+    Consortiums:
+      SampleConsortium:
+        Organizations:
+          - *HartleyMSP
+
