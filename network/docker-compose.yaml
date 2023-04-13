@@ -23,8 +23,8 @@ services:
     command: orderer
     volumes:
       - ./config/orderer.genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - /Users/joe/hartley-fabric/network/config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
-      - /Users/joe/hartley-fabric/network/config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls:/var/hyperledger/orderer/tls
+      - /Users/joe/hartley-fabric/network/config/crypto-config/ordererOrganizations/hartley.example.com/orderers/orderer.hartley.example.com/msp:/var/hyperledger/orderer/msp
+      - /Users/joe/hartley-fabric/network/config/crypto-config/ordererOrganizations/hartley.example.com/orderers/orderer.hartley.example.com/tls:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
     networks:
@@ -54,8 +54,8 @@ services:
     working_dir: /opt/gopath/src/github
     volumes:
       - /var/run/:/host/var/run/
-      - /Users/joe/hartley-fabric/network/config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-      - /Users/joe/hartley-fabric/network/config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - /Users/joe/hartley-fabric/network/config/crypto-config/peerOrganizations/hartley.example.com/peers/peer0.hartley.example.com/msp:/etc/hyperledger/fabric/msp
+      - /Users/joe/hartley-fabric/network/config/crypto-config/peerOrganizations/hartley.example.com/peers/peer0.hartley.example.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7052:7052

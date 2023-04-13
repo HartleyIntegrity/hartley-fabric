@@ -1,5 +1,11 @@
+OrdererOrgs:
+  - Name: OrdererOrg
+    Domain: hartley.example.com
+    Specs:
+      - Hostname: orderer
+
 PeerOrgs:
-  - Name: Hartley
+  - Name: HartleyMSP
     Domain: hartley.example.com
     EnableNodeOUs: true
     Template:
