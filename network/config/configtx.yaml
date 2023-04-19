@@ -22,6 +22,9 @@ Organizations:
     Name: HartleyMSP
     ID: HartleyMSPID
     MSPDir: /Users/joe/hartley-fabric/network/crypto-config/peerOrganizations/hartley.example.com/msp
+    AnchorPeers:
+      - Host: peer0.hartley.example.com
+        Port: 7051
     Policies:
       Readers:
         Type: Signature

@@ -3,6 +3,7 @@ OrdererOrgs:
     Domain: hartley.example.com
     Specs:
       - Hostname: orderer
+    MSPDir: /Users/joe/hartley-fabric/network/config/crypto-config/ordererOrganizations/hartley.example.com/orderers/orderer.hartley.example.com/msp
 
 PeerOrgs:
   - Name: HartleyMSP
