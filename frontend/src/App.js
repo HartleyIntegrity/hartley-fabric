@@ -1,19 +1,18 @@
-import { Routes, Route } from 'react-router-dom';
-import { CreateTenancyAgreement } from '../CreateTenancyAgreement/CreateTenancyAgreement';
-import { EditTenancyAgreement } from '../EditTenancyAgreement/EditTenancyAgreement';
-import { TenancyAgreementList } from '../TenancyAgreementList/TenancyAgreementList';
-import Header from '../Header/Header';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PropertiesPage from './pages/PropertiesPage';
+import ContractsPage from './pages/ContractsPage';
+import "./index.css"
 
 function App() {
   return (
-    <div className="App">
-      <Header />
+    <Router>
       <Routes>
-        <Route path="/" element={<TenancyAgreementList />} />
-        <Route path="/create" element={<CreateTenancyAgreement />} />
-        <Route path="/edit/:id" element={<EditTenancyAgreement />} />
+        <Route path="/" element={<h1>Welcome to Hartley-Fabric</h1>} />
+        <Route path="/properties" element={<PropertiesPage />} />
+        <Route path="/contracts" element={<ContractsPage />} />
       </Routes>
-    </div>
+    </Router>
   );
 }
 

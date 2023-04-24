@@ -1,25 +1,15 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 
-const PropertyCard = ({ property }) => {
+function PropertyCard({ property }) {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        component="img"
-        height="140"
-        image={property.image}
-        alt="Property Image"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {property.name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {property.description}
-        </Typography>
-      </CardContent>
-    </Card>
+    <div className="card h-100">
+      <img src={property.image} className="card-img-top" alt={property.address} />
+      <div className="card-body">
+        <h5 className="card-title">{property.address}</h5>
+        <p className="card-text">${property.rent} / month</p>
+      </div>
+    </div>
   );
-};
+}
 
 export default PropertyCard;

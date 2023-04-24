@@ -1,20 +1,23 @@
 package api
 
 import (
-	"net/http"
-
 	"github.com/gorilla/mux"
+	"github.com/hartley-fabric/hartley-fabric/backend/database"
 )
 
-func NewRouter() *mux.Router {
-	router := mux.NewRouter()
+// NewRouter returns a new router for our API.
+func NewRouter(db database.Models) *mux.Router {
+	// create a new router
+	r := mux.NewRouter()
 
-	router.HandleFunc("/api/blockchain", GetBlockchain).Methods(http.MethodGet)
-	router.HandleFunc("/api/blockchain", AddBlock).Methods(http.MethodPost)
-	router.HandleFunc("/api/blockchain/{id}", UpdateBlock).Methods(http.MethodPut)
-	router.HandleFunc("/api/blockchain/{id}", DeleteBlock).Methods(http.MethodDelete)
+	// define the routes
+	r.HandleFunc("/api/properties", PropertiesHandler(db)).Methods("GET")
+	r.HandleFunc("/api/properties/{id}", PropertyHandler(db)).Methods("GET")
+	r.HandleFunc("/api/contracts", ContractsHandler(db)).Methods("GET", "POST")
+	r.HandleFunc("/api/contracts/{id}", ContractHandler(db)).Methods("DELETE")
 
-	router.Use(LoggerMiddleware)
+	// add the authentication middleware to all routes
+	r.Use(AuthMiddleware)
 
-	return router
+	return r
 }
