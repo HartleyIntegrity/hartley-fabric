@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/HartleyIntegrity/hartley-fabric/backend/blockchain"
-	"github.com/HartleyIntegrity/hartley-fabric/backend/database"
 	"github.com/gin-gonic/gin"
+	"github.com/hartley-fabric/backend/blockchain"
+	"github.com/hartley-fabric/backend/database"
 )
 
 var db *database.Database
