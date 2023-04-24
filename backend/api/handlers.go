@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"hartley-fabric/backend/blockchain"
+	"hartley-fabric/backend/database"
+
 	"github.com/gin-gonic/gin"
-	"github.com/hartley-fabric/backend/blockchain"
-	"github.com/hartley-fabric/backend/database"
 )
 
 var db *database.Database
@@ -20,6 +21,7 @@ func RegisterHandlers(router *gin.Engine, database *database.Database, blockchai
 	router.POST("/api/tenancy-agreements", createTenancyAgreement)
 	router.PUT("/api/tenancy-agreements/:id", updateTenancyAgreement)
 	router.DELETE("/api/tenancy-agreements/:id", deleteTenancyAgreement)
+	router.GET("/api/latest-hash", getLatestHash)
 }
 
 func getTenancyAgreements(c *gin.Context) {
@@ -66,7 +68,7 @@ func updateTenancyAgreement(c *gin.Context) {
 		if agreement.ID == id {
 			agreement = &updatedAgreement
 			data, _ := json.Marshal(agreement)
-			block.Data = data
+			block.Data = []byte(data)
 			updated = true
 			break
 		}
@@ -77,6 +79,16 @@ func updateTenancyAgreement(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Tenancy agreement not found"})
 	}
+}
+
+func getLatestHash(c *gin.Context) {
+	latestHash := ""
+	if len(bc.Blocks) > 0 {
+		latestHash = string(bc.Blocks[len(bc.Blocks)-1].Hash)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"latestHash": latestHash,
+	})
 }
 
 func deleteTenancyAgreement(c *gin.Context) {

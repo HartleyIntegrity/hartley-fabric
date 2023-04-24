@@ -9,7 +9,8 @@ function TenancyAgreementList() {
 
   useEffect(() => {
     getTenancyAgreements().then((data) => setAgreements(data));
-  }, []);
+}, []);
+
 
   const handleDelete = (id) => {
     deleteTenancyAgreement(id).then(() => {
@@ -32,24 +33,30 @@ function TenancyAgreementList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {agreements.map((agreement) => (
-            <TableRow key={agreement.id}>
-              <TableCell>{agreement.id}</TableCell>
-              <TableCell>
-                <Link to={`/property/${agreement.property}`}>{agreement.property}</Link>
-              </TableCell>
-              <TableCell>{agreement.landlord}</TableCell>
-              <TableCell>{agreement.tenant}</TableCell>
-              <TableCell>{agreement.start_date}</TableCell>
-              <TableCell>{agreement.end_date}</TableCell>
-              <TableCell>
-                <Link to={`/update/${agreement.id}`}>Edit</Link>
-                <IconButton onClick={() => handleDelete(agreement.id)} aria-label="delete">
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+          {agreements.length > 0 ? (
+            agreements.map((agreement) => (
+              <TableRow key={agreement.ID}>
+                <TableCell>{agreement.ID}</TableCell>
+                <TableCell>
+                  <Link to={`/property/${agreement.Property}`}>{agreement.Property}</Link>
+                </TableCell>
+                <TableCell>{agreement.Landlord}</TableCell>
+                <TableCell>{agreement.Tenant}</TableCell>
+                <TableCell>{agreement.StartDate}</TableCell>
+                <TableCell>{agreement.EndDate}</TableCell>
+                <TableCell>
+                  <Link to={`/update/${agreement.ID}`}>Edit</Link>
+                  <IconButton onClick={() => handleDelete(agreement.ID)} aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={7} align="center">No tenancy agreements found.</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>

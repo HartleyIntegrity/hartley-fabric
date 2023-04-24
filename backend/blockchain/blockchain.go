@@ -3,6 +3,8 @@ package blockchain
 import (
 	"bytes"
 	"crypto/sha256"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,13 +25,18 @@ type TenancyAgreement struct {
 }
 
 type Blockchain struct {
-	Blocks []*Block
+	Blocks     []*Block
+	LatestHash string
 }
 
-func NewBlock(data string, prevBlockHash []byte) *Block {
+func NewBlock(prevBlockHash []byte, data string) *Block {
 	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}}
 	block.SetHash()
 	return block
+}
+
+func IntToHex(n int64) []byte {
+	return []byte(strconv.FormatInt(n, 16))
 }
 
 func (b *Block) SetHash() {
@@ -39,15 +46,34 @@ func (b *Block) SetHash() {
 }
 
 func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
+	return NewBlock([]byte{}, "Genesis Block")
 }
 
 func NewBlockchain() *Blockchain {
-	return &Blockchain{[]*Block{NewGenesisBlock()}}
+	return &Blockchain{
+		Blocks:     []*Block{NewGenesisBlock()},
+		LatestHash: "",
+	}
 }
 
 func (bc *Blockchain) AddBlock(data string) {
 	prevBlock := bc.Blocks[len(bc.Blocks)-1]
-	newBlock := NewBlock(data, prevBlock.Hash)
+	newBlock := NewBlock(prevBlock.Hash, data)
 	bc.Blocks = append(bc.Blocks, newBlock)
+	bc.LatestHash = string(newBlock.Hash)
+}
+
+func (bc *Blockchain) String() string {
+	var lines []string
+	for _, block := range bc.Blocks {
+		lines = append(lines, block.String())
+	}
+	return strings.Join(lines, "\n")
+}
+
+func (b *Block) String() string {
+	return "Timestamp: " + strconv.FormatInt(b.Timestamp, 10) + "\n" +
+		"Data: " + string(b.Data) + "\n" +
+		"PrevBlockHash: " + string(b.PrevBlockHash) + "\n" +
+		"Hash: " + string(b.Hash) + "\n"
 }

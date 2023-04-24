@@ -1,25 +1,41 @@
 package main
 
 import (
-	"github.com/HartleyIntegrity/hartley-fabric/backend/api"
-	"github.com/HartleyIntegrity/hartley-fabric/backend/blockchain"
-	"github.com/HartleyIntegrity/hartley-fabric/backend/database"
+	"hartley-fabric/backend/api"
+	"hartley-fabric/backend/blockchain"
+	"hartley-fabric/backend/database"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := gin.Default()
+	r := gin.Default()
 
-	// Initialize the blockchain and database
-	bc := blockchain.NewBlockchain()
+	// Create a new CORS configuration.
+	config := cors.DefaultConfig()
+
+	// Set the allowed origins.
+	config.AllowOrigins = []string{"http://localhost:3000"}
+
+	// Set the allowed methods.
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+
+	// Set the allowed headers.
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+
+	// Use the CORS middleware.
+	r.Use(cors.New(config))
+
+	// Create a new database instance.
 	db := database.NewDatabase()
 
-	// Register the API handlers
-	api.RegisterHandlers(router)
+	// Create a new blockchain instance.
+	bc := blockchain.NewBlockchain()
 
-	// Set up JWT middleware
-	router.Use(api.JWTMiddleware("your-secret-key"))
+	// Register the API handlers.
+	api.RegisterHandlers(r, db, bc)
 
-	// Start the server
-	router.Run(":8080")
+	// Start the server.
+	r.Run(":8080")
 }
