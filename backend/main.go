@@ -3,33 +3,13 @@ package main
 import (
 	"log"
 	"net/http"
-	"time"
 
-	"github.com/gorilla/mux"
-
-	"github.com/Hartley-Fabric/backend/api"
-
-	"github.com/HartleyIntegrity/hartley-fabric/backend/api"
-	"github.com/HartleyIntegrity/hartley-fabric/backend/blockchain"
+	"github.com/yourusername/hartley-fabric/backend/api"
 )
 
 func main() {
-	router := mux.NewRouter()
-	router.HandleFunc("/api/signin", api.signInHandler).Methods("POST")
+	router := api.NewRouter()
 
-	genesisBlock := blockchain.Block{
-		Index:        0,
-		Timestamp:    time.Now().Format(time.RFC3339),
-		Transactions: []blockchain.Transaction{},
-		PrevHash:     "",
-		Hash:         "",
-	}
-	genesisBlock.Hash = blockchain.CreateHash(genesisBlock)
-	api.Blockchain = append(api.Blockchain, genesisBlock)
-
-	apiHandler := api.NewAPI()
-
-	port := "8000"
-	log.Printf("Server running on http://localhost:%s", port)
+	log.Println("Server starting on port 8080...")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

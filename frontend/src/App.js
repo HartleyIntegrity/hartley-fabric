@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
-import SignIn from './components/SignIn';
-import Properties from './components/Properties';
+import { Routes, Route } from 'react-router-dom';
+import { CreateTenancyAgreement } from '../CreateTenancyAgreement/CreateTenancyAgreement';
+import { EditTenancyAgreement } from '../EditTenancyAgreement/EditTenancyAgreement';
+import { TenancyAgreementList } from '../TenancyAgreementList/TenancyAgreementList';
+import Header from '../Header/Header';
 
-const App = () => {
-  const [token, setToken] = useState('');
-
-  const handleSignIn = (newToken) => {
-    setToken(newToken);
-  };
-
+function App() {
   return (
-    <Router>
+    <div className="App">
+      <Header />
       <Routes>
-        <Route path="/" element={token ? <Navigate to="/properties" replace /> : <SignIn onSignIn={handleSignIn} />} />
-        <Route path="/properties" element={!token ? <Navigate to="/" replace /> : <Properties />} />
+        <Route path="/" element={<TenancyAgreementList />} />
+        <Route path="/create" element={<CreateTenancyAgreement />} />
+        <Route path="/edit/:id" element={<EditTenancyAgreement />} />
       </Routes>
-    </Router>
+    </div>
   );
-};
+}
 
 export default App;

@@ -1,49 +1,39 @@
 package blockchain
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
-	"time"
+	"sync"
 )
 
-type Block struct {
-	Index        int
-	Timestamp    string
-	Transactions []Transaction
-	Hash         string
-	PrevHash     string
+type Blockchain struct {
+	Chain []*Block
 }
 
-type Transaction struct {
-	ID         string
-	Tenant     string
-	PropertyID string
-	Details    PropertyDetails
+var once sync.Once
+var blockchainInstance *Blockchain
+
+func GetBlockchain() *Blockchain {
+	once.Do(func() {
+		blockchainInstance = &Blockchain{
+			Chain: []*Block{genesisBlock()},
+		}
+	})
+	return blockchainInstance
 }
 
-type PropertyDetails struct {
-	Price          float64
-	StartDate      string
-	EndDate        string
-	RentPrice      float64
-	MaintenanceFee float64
-}
-
-func CreateHash(block Block) string {
-	record := string(block.Index) + block.Timestamp + string(len(block.Transactions)) + block.PrevHash
-	h := sha256.New()
-	h.Write([]byte(record))
-	hashed := h.Sum(nil)
-	return hex.EncodeToString(hashed)
-}
-
-func GenerateNewBlock(prevBlock Block, transactions []Transaction) Block {
-	newBlock := Block{}
-	newBlock.Index = prevBlock.Index + 1
-	newBlock.Timestamp = time.Now().Format(time.RFC3339)
-	newBlock.Transactions = transactions
-	newBlock.PrevHash = prevBlock.Hash
-	newBlock.Hash = CreateHash(newBlock)
-
-	return newBlock
+func genesisBlock() *Block {
+	tenancyAgree := TenancyAgree{
+		ID:          "0",
+		Property:    "N/A",
+		Tenant:      "N/A",
+		StartDate:   "N/A",
+		EndDate:     "N/A",
+		Description: "Genesis Block",
+	}
+	genesis := &Block{
+		Index:        0,
+		Timestamp:    "2023-01-01T00:00:00Z",
+		TenancyAgree: tenancyAgree,
+	}
+	genesis.Hash = genesis.calculateHash()
+	return genesis
 }
